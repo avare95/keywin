@@ -1,6 +1,8 @@
 package com.example.keywin
 
 import android.annotation.SuppressLint
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -12,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 
 class WindowsKeyboardService : InputMethodService() {
 
@@ -30,15 +33,18 @@ class WindowsKeyboardService : InputMethodService() {
     private var btnCaps: Button? = null
 
     // Renkler
-    private val colorActive = Color.parseColor("#0078D7")   // Windows Mavi (Aktif/Basılı)
-    private val colorDefaultSpecial = Color.parseColor("#262626") // Fonksiyon/Özel tuş rengi
-    private val colorDefaultStandard = Color.parseColor("#383838") // Harf/Rakam tuş rengi
+    private val colorActive = Color.parseColor("#0078D7")
+    private val colorDefaultSpecial = Color.parseColor("#262626")
+    private val colorDefaultStandard = Color.parseColor("#383838")
 
-    // Boyut Durumu
+    // Boyut ve Mod Değişkenleri
     private var isCompactMode = true
+    private var isNumpadActive = false
+    private var layoutQwerty: ViewGroup? = null
+    private var layoutNumpad: ViewGroup? = null
+    private var btnToggleMode: Button? = null
     private var rows: List<ViewGroup> = emptyList()
 
-    // Dinamik Harf ve Rakam Butonları
     private val letterButtons = mutableMapOf<Int, Pair<String, String>>()
     private val symbolButtons = mutableMapOf<Int, Pair<String, String>>()
     private var rootView: View? = null
@@ -53,6 +59,7 @@ class WindowsKeyboardService : InputMethodService() {
         setupTopBar(view)
         setupModifierKeys(view)
         bindKeyEvents(view)
+        bindNumpadAndMacros(view)
         updateLabels()
 
         return view
@@ -85,6 +92,41 @@ class WindowsKeyboardService : InputMethodService() {
     }
 
     private fun setupTopBar(view: View) {
+        layoutQwerty = view.findViewById(R.id.layout_qwerty_container)
+        layoutNumpad = view.findViewById(R.id.layout_numpad_macro_container)
+        btnToggleMode = view.findViewById(R.id.btn_toggle_mode)
+
+        // Android Panosundan Windows'a Metin Aktarma
+        view.findViewById<Button>(R.id.btn_clipboard_paste)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+            val clip = clipboard?.primaryClip
+
+            if (clip != null && clip.itemCount > 0) {
+                val textToPaste = clip.getItemAt(0).coerceToText(this).toString()
+                if (textToPaste.isNotEmpty()) {
+                    currentInputConnection?.commitText(textToPaste, 1)
+                }
+            } else {
+                Toast.makeText(this, "Android panosu boş", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // QWERTY <-> Numpad/Makro Geçişi
+        btnToggleMode?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            isNumpadActive = !isNumpadActive
+            if (isNumpadActive) {
+                layoutQwerty?.visibility = View.GONE
+                layoutNumpad?.visibility = View.VISIBLE
+                btnToggleMode?.text = "⌨ Qwerty"
+            } else {
+                layoutNumpad?.visibility = View.GONE
+                layoutQwerty?.visibility = View.VISIBLE
+                btnToggleMode?.text = "🔢 Numpad / Makro"
+            }
+        }
+
         view.findViewById<Button>(R.id.btn_hide_keyboard)?.setOnClickListener {
             requestHideSelf(0)
         }
@@ -97,6 +139,7 @@ class WindowsKeyboardService : InputMethodService() {
         val row5 = view.findViewById<ViewGroup>(R.id.row_bottom)
         rows = listOf(row1, row2, row3, row4, row5)
 
+        // Boyutlandırma Butonu
         view.findViewById<Button>(R.id.btn_toggle_size)?.setOnClickListener {
             isCompactMode = !isCompactMode
             val density = resources.displayMetrics.density
@@ -183,7 +226,6 @@ class WindowsKeyboardService : InputMethodService() {
     }
 
     private fun bindKeyEvents(view: View) {
-        // Fonksiyon Tuşları (Varsayılan Koyu Renk: #262626)
         bindTouch(view, R.id.btn_esc, KeyEvent.KEYCODE_ESCAPE, colorDefaultSpecial)
         bindTouch(view, R.id.btn_f1, KeyEvent.KEYCODE_F1, colorDefaultSpecial)
         bindTouch(view, R.id.btn_f2, KeyEvent.KEYCODE_F2, colorDefaultSpecial)
@@ -199,7 +241,6 @@ class WindowsKeyboardService : InputMethodService() {
         bindTouch(view, R.id.btn_f12, KeyEvent.KEYCODE_F12, colorDefaultSpecial)
         bindTouch(view, R.id.btn_del, KeyEvent.KEYCODE_FORWARD_DEL, colorDefaultSpecial)
 
-        // Rakamlar ve Backspace
         bindTouch(view, R.id.btn_1, KeyEvent.KEYCODE_1, colorDefaultStandard)
         bindTouch(view, R.id.btn_2, KeyEvent.KEYCODE_2, colorDefaultStandard)
         bindTouch(view, R.id.btn_3, KeyEvent.KEYCODE_3, colorDefaultStandard)
@@ -212,7 +253,6 @@ class WindowsKeyboardService : InputMethodService() {
         bindTouch(view, R.id.btn_0, KeyEvent.KEYCODE_0, colorDefaultStandard)
         bindTouch(view, R.id.btn_backspace, KeyEvent.KEYCODE_DEL, colorDefaultSpecial)
 
-        // Harfler ve Özel Tuşlar
         bindTouch(view, R.id.btn_tab, KeyEvent.KEYCODE_TAB, colorDefaultSpecial)
         bindTouch(view, R.id.btn_q, KeyEvent.KEYCODE_Q, colorDefaultStandard)
         bindTouch(view, R.id.btn_w, KeyEvent.KEYCODE_W, colorDefaultStandard)
@@ -247,14 +287,83 @@ class WindowsKeyboardService : InputMethodService() {
         bindTouch(view, R.id.btn_period, KeyEvent.KEYCODE_PERIOD, colorDefaultStandard)
         bindTouch(view, R.id.btn_up, KeyEvent.KEYCODE_DPAD_UP, colorDefaultSpecial)
 
-        // Alt Sıra
         bindTouch(view, R.id.btn_space, KeyEvent.KEYCODE_SPACE, colorDefaultStandard)
         bindTouch(view, R.id.btn_left, KeyEvent.KEYCODE_DPAD_LEFT, colorDefaultSpecial)
         bindTouch(view, R.id.btn_down, KeyEvent.KEYCODE_DPAD_DOWN, colorDefaultSpecial)
         bindTouch(view, R.id.btn_right, KeyEvent.KEYCODE_DPAD_RIGHT, colorDefaultSpecial)
     }
 
-    // Dokunma anında maviye boyayan ve hafifçe içeri çöktüren (scale) fonksiyon
+    private fun bindNumpadAndMacros(view: View) {
+        bindTouch(view, R.id.btn_num_0, KeyEvent.KEYCODE_NUMPAD_0, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_1, KeyEvent.KEYCODE_NUMPAD_1, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_2, KeyEvent.KEYCODE_NUMPAD_2, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_3, KeyEvent.KEYCODE_NUMPAD_3, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_4, KeyEvent.KEYCODE_NUMPAD_4, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_5, KeyEvent.KEYCODE_NUMPAD_5, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_6, KeyEvent.KEYCODE_NUMPAD_6, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_7, KeyEvent.KEYCODE_NUMPAD_7, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_8, KeyEvent.KEYCODE_NUMPAD_8, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_9, KeyEvent.KEYCODE_NUMPAD_9, colorDefaultStandard)
+
+        bindTouch(view, R.id.btn_num_dot, KeyEvent.KEYCODE_NUMPAD_DOT, colorDefaultStandard)
+        bindTouch(view, R.id.btn_num_enter, KeyEvent.KEYCODE_NUMPAD_ENTER, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_num_add, KeyEvent.KEYCODE_NUMPAD_ADD, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_num_sub, KeyEvent.KEYCODE_NUMPAD_SUBTRACT, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_num_mul, KeyEvent.KEYCODE_NUMPAD_MULTIPLY, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_num_div, KeyEvent.KEYCODE_NUMPAD_DIVIDE, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_num_lock, KeyEvent.KEYCODE_NUM_LOCK, colorDefaultSpecial)
+
+        bindTouch(view, R.id.btn_nav_insert, KeyEvent.KEYCODE_INSERT, colorDefaultStandard)
+        bindTouch(view, R.id.btn_nav_home, KeyEvent.KEYCODE_MOVE_HOME, colorDefaultStandard)
+        bindTouch(view, R.id.btn_nav_end, KeyEvent.KEYCODE_MOVE_END, colorDefaultStandard)
+        bindTouch(view, R.id.btn_nav_pgup, KeyEvent.KEYCODE_PAGE_UP, colorDefaultStandard)
+        bindTouch(view, R.id.btn_nav_pgdn, KeyEvent.KEYCODE_PAGE_DOWN, colorDefaultStandard)
+        bindTouch(view, R.id.btn_nav_del, KeyEvent.KEYCODE_FORWARD_DEL, colorDefaultStandard)
+        bindTouch(view, R.id.btn_nav_prtscn, KeyEvent.KEYCODE_SYSRQ, colorDefaultSpecial)
+
+        bindTouch(view, R.id.btn_macro_esc, KeyEvent.KEYCODE_ESCAPE, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_macro_backspace, KeyEvent.KEYCODE_DEL, colorDefaultSpecial)
+        bindTouch(view, R.id.btn_macro_enter, KeyEvent.KEYCODE_ENTER, colorDefaultSpecial)
+
+        bindMacro(view, R.id.btn_macro_taskmgr, listOf(KeyEvent.KEYCODE_CTRL_LEFT, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_ESCAPE))
+        bindMacro(view, R.id.btn_macro_wind, listOf(KeyEvent.KEYCODE_META_LEFT, KeyEvent.KEYCODE_D))
+        bindMacro(view, R.id.btn_macro_alttab, listOf(KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_TAB))
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun bindMacro(view: View, id: Int, keyCodes: List<Int>) {
+        val button = view.findViewById<Button>(id) ?: return
+        button.setOnTouchListener { v, event ->
+            val ic = currentInputConnection
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    button.backgroundTintMode = PorterDuff.Mode.SRC_OVER
+                    button.backgroundTintList = ColorStateList.valueOf(colorActive)
+                    v.scaleX = 0.93f
+                    v.scaleY = 0.93f
+
+                    for (k in keyCodes) {
+                        ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, k))
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    button.backgroundTintMode = PorterDuff.Mode.SRC_OVER
+                    button.backgroundTintList = ColorStateList.valueOf(colorDefaultSpecial)
+                    v.scaleX = 1.0f
+                    v.scaleY = 1.0f
+
+                    for (k in keyCodes.reversed()) {
+                        ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, k))
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun bindTouch(view: View, id: Int, keyCode: Int, defaultColor: Int) {
         val button = view.findViewById<Button>(id) ?: return
@@ -263,14 +372,11 @@ class WindowsKeyboardService : InputMethodService() {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-
-                    // Basılma Geri Bildirimi: Tuş mavi olur ve hafifçe basılır
                     button.backgroundTintMode = PorterDuff.Mode.SRC_OVER
                     button.backgroundTintList = ColorStateList.valueOf(colorActive)
                     v.scaleX = 0.93f
                     v.scaleY = 0.93f
 
-                    // Bekleyen modifikatörleri ilet
                     if (isAltActive) ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ALT_LEFT))
                     if (isCtrlActive) ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT))
                     if (isShiftActive) ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT))
@@ -280,7 +386,6 @@ class WindowsKeyboardService : InputMethodService() {
                     true
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    // Bırakılma Geri Bildirimi: Orijinal renk ve boyuta geri döner
                     button.backgroundTintMode = PorterDuff.Mode.SRC_OVER
                     button.backgroundTintList = ColorStateList.valueOf(defaultColor)
                     v.scaleX = 1.0f
@@ -288,7 +393,6 @@ class WindowsKeyboardService : InputMethodService() {
 
                     ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, keyCode))
 
-                    // Modifikatörleri sıfırla
                     if (isAltActive) {
                         ic?.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ALT_LEFT))
                         isAltActive = false

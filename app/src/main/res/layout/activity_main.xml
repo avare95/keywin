@@ -1,13 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="#121212"
+    android:fillViewport="true">
 
-    <Button
-        android:id="@+id/btn_enable_keyboard"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Klavyeyi Ayarlardan Etkinleştir" />
-</FrameLayout>
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Başlık ve Sürüm Rozeti -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="KeyWin"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#1A0078D7"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp"
+                android:text="v1.0.0"
+                android:textColor="#00A4EF"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Evrensel Windows &amp; Uzak Masaüstü Klavyesi"
+            android:textColor="#888888"
+            android:textSize="13sp" />
+
+        <!-- Desteklenen Uygulama Rozetleri (Yatay Kaydırma) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#222222"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="🎮 Moonlight / Sunshine"
+                    android:textColor="#00A4EF"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#222222"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="⚡ AnyDesk"
+                    android:textColor="#EF4444"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#222222"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="👥 TeamViewer"
+                    android:textColor="#3B82F6"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#222222"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="🖥️ Microsoft RDP"
+                    android:textColor="#10B981"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#222222"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="🦀 RustDesk"
+                    android:textColor="#F59E0B"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#222222"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="🕹️ Parsec"
+                    android:textColor="#EC4899"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- 1. KART: Uygulama Nedir & Ne İşe Yarar? -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#2E2E2E"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ℹ️ Bu Uygulama Nedir?"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="KeyWin; uzaktan masaüstü ve oyun akışı uygulamalarında (AnyDesk, Moonlight, TeamViewer, RDP, RustDesk, Parsec) Windows bilgisayarları fiziksel bir donanım klavyesi hassasiyetiyle yönetmek için geliştirilmiştir.\n\nNormal telefon klavyeleri yazı yazmak için tasarlanmıştır ve Windows sistem tuşlarını (Alt+Tab, Win+R, Ctrl+Shift+Esc, F tuşları, Numpad) iletemez. KeyWin ise doğrudan donanım seviyesinde tuş olayları (Hardware KeyEvents) üreterek uzak bilgisayara mekanik bir klavye takılmış gibi çalışır."
+                    android:textColor="#CCCCCC"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2. KART: Hızlı Kurulum & Test Alanı -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#2E2E2E"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ Hızlı Kurulum"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_enable_ime"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#0078D7"
+                    android:text="1. Klavyeyi Android'de Etkinleştir"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    app:cornerRadius="8dp" />
+
+                <Button
+                    android:id="@+id/btn_select_ime"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="#2D2D2D"
+                    android:text="2. Varsayılan Klavye Olarak Seç"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    app:cornerRadius="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="🧪 Klavyeyi Burada Test Edin:"
+                    android:textColor="#888888"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/et_test_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#282828"
+                    android:hint="Tuşları ve panoyu denemek için buraya dokunun..."
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#666666"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 3. KART: GitHub ve Açık Kaynak -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#2E2E2E"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌐 Açık Kaynak &amp; Katkı"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="KeyWin MIT lisansı ile geliştirilen açık kaynaklı bir projedir. Kodları incelemek, hata bildirmek veya en güncel APK sürümlerini indirmek için GitHub deposunu ziyaret edebilirsiniz."
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_open_github"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#24292E"
+                    android:text="🐙 GitHub Reposu: avare95/keywin"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="#444D56"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="Geliştirici: avare95 • MIT License"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+</ScrollView>
