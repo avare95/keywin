@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_keyboard_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#161616"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="42dp">
+
+    <!-- Üst Kontrol Çubuğu (Boyutlandırma ve Gizleme) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="2dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Windows Keyboard"
+            android:textColor="#888888"
+            android:textSize="10sp"
+            android:paddingStart="6dp" />
+
+        <Button
+            android:id="@+id/btn_toggle_size"
+            style="@style/WinKeySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:text="↕ Boyut (Kompakt/Büyük)"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textSize="10sp"
+            android:backgroundTint="#333333" />
+
+        <Button
+            android:id="@+id/btn_hide_keyboard"
+            style="@style/WinKeySmall"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:text="✕"
+            android:textColor="#FF6B6B"
+            android:textSize="11sp"
+            android:backgroundTint="#262626" />
+    </LinearLayout>
+
+    <!-- 1. Satır: Fonksiyon Tuşları -->
+    <LinearLayout
+        android:id="@+id/row_f_keys"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal"
+        android:weightSum="14"
+        android:layout_marginBottom="2dp">
+        <Button android:id="@+id/btn_esc" style="@style/WinKeySmall" android:text="Esc" />
+        <Button android:id="@+id/btn_f1" style="@style/WinKeySmall" android:text="F1" />
+        <Button android:id="@+id/btn_f2" style="@style/WinKeySmall" android:text="F2" />
+        <Button android:id="@+id/btn_f3" style="@style/WinKeySmall" android:text="F3" />
+        <Button android:id="@+id/btn_f4" style="@style/WinKeySmall" android:text="F4" />
+        <Button android:id="@+id/btn_f5" style="@style/WinKeySmall" android:text="F5" />
+        <Button android:id="@+id/btn_f6" style="@style/WinKeySmall" android:text="F6" />
+        <Button android:id="@+id/btn_f7" style="@style/WinKeySmall" android:text="F7" />
+        <Button android:id="@+id/btn_f8" style="@style/WinKeySmall" android:text="F8" />
+        <Button android:id="@+id/btn_f9" style="@style/WinKeySmall" android:text="F9" />
+        <Button android:id="@+id/btn_f10" style="@style/WinKeySmall" android:text="F10" />
+        <Button android:id="@+id/btn_f11" style="@style/WinKeySmall" android:text="F11" />
+        <Button android:id="@+id/btn_f12" style="@style/WinKeySmall" android:text="F12" />
+        <Button android:id="@+id/btn_del" style="@style/WinKeySmall" android:text="Del" />
+    </LinearLayout>
+
+    <!-- 2. Satır: Rakamlar ve Semboller -->
+    <LinearLayout
+        android:id="@+id/row_numbers"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal"
+        android:weightSum="11.5"
+        android:layout_marginBottom="2dp">
+        <Button android:id="@+id/btn_1" style="@style/WinKeyStandard" android:text="1" />
+        <Button android:id="@+id/btn_2" style="@style/WinKeyStandard" android:text="2" />
+        <Button android:id="@+id/btn_3" style="@style/WinKeyStandard" android:text="3" />
+        <Button android:id="@+id/btn_4" style="@style/WinKeyStandard" android:text="4" />
+        <Button android:id="@+id/btn_5" style="@style/WinKeyStandard" android:text="5" />
+        <Button android:id="@+id/btn_6" style="@style/WinKeyStandard" android:text="6" />
+        <Button android:id="@+id/btn_7" style="@style/WinKeyStandard" android:text="7" />
+        <Button android:id="@+id/btn_8" style="@style/WinKeyStandard" android:text="8" />
+        <Button android:id="@+id/btn_9" style="@style/WinKeyStandard" android:text="9" />
+        <Button android:id="@+id/btn_0" style="@style/WinKeyStandard" android:text="0" />
+        <Button android:id="@+id/btn_backspace" style="@style/WinKeySpecial" android:layout_weight="1.5" android:text="⌫" />
+    </LinearLayout>
+
+    <!-- 3. Satır: Tab + QWERTY -->
+    <LinearLayout
+        android:id="@+id/row_letters_1"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal"
+        android:weightSum="11.5"
+        android:layout_marginBottom="2dp">
+        <Button android:id="@+id/btn_tab" style="@style/WinKeySpecial" android:layout_weight="1.5" android:text="Tab" />
+        <Button android:id="@+id/btn_q" style="@style/WinKeyStandard" android:text="q" />
+        <Button android:id="@+id/btn_w" style="@style/WinKeyStandard" android:text="w" />
+        <Button android:id="@+id/btn_e" style="@style/WinKeyStandard" android:text="e" />
+        <Button android:id="@+id/btn_r" style="@style/WinKeyStandard" android:text="r" />
+        <Button android:id="@+id/btn_t" style="@style/WinKeyStandard" android:text="t" />
+        <Button android:id="@+id/btn_y" style="@style/WinKeyStandard" android:text="y" />
+        <Button android:id="@+id/btn_u" style="@style/WinKeyStandard" android:text="u" />
+        <Button android:id="@+id/btn_i" style="@style/WinKeyStandard" android:text="i" />
+        <Button android:id="@+id/btn_o" style="@style/WinKeyStandard" android:text="o" />
+        <Button android:id="@+id/btn_p" style="@style/WinKeyStandard" android:text="p" />
+    </LinearLayout>
+
+    <!-- 4. Satır: Caps + ASDF + Enter -->
+    <LinearLayout
+        android:id="@+id/row_letters_2"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal"
+        android:weightSum="11.5"
+        android:layout_marginBottom="2dp">
+        <Button android:id="@+id/btn_caps" style="@style/WinKeySpecial" android:layout_weight="1.25" android:text="Caps" />
+        <Button android:id="@+id/btn_a" style="@style/WinKeyStandard" android:text="a" />
+        <Button android:id="@+id/btn_s" style="@style/WinKeyStandard" android:text="s" />
+        <Button android:id="@+id/btn_d" style="@style/WinKeyStandard" android:text="d" />
+        <Button android:id="@+id/btn_f" style="@style/WinKeyStandard" android:text="f" />
+        <Button android:id="@+id/btn_g" style="@style/WinKeyStandard" android:text="g" />
+        <Button android:id="@+id/btn_h" style="@style/WinKeyStandard" android:text="h" />
+        <Button android:id="@+id/btn_j" style="@style/WinKeyStandard" android:text="j" />
+        <Button android:id="@+id/btn_k" style="@style/WinKeyStandard" android:text="k" />
+        <Button android:id="@+id/btn_l" style="@style/WinKeyStandard" android:text="l" />
+        <Button android:id="@+id/btn_enter" style="@style/WinKeySpecial" android:layout_weight="1.25" android:text="Enter" />
+    </LinearLayout>
+
+    <!-- 5. Satır: Shift + ZXCV + Noktalama + Yukarı -->
+    <LinearLayout
+        android:id="@+id/row_letters_3"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal"
+        android:weightSum="11.5"
+        android:layout_marginBottom="2dp">
+        <Button android:id="@+id/btn_shift" style="@style/WinKeySpecial" android:layout_weight="1.5" android:text="Shift" />
+        <Button android:id="@+id/btn_z" style="@style/WinKeyStandard" android:text="z" />
+        <Button android:id="@+id/btn_x" style="@style/WinKeyStandard" android:text="x" />
+        <Button android:id="@+id/btn_c" style="@style/WinKeyStandard" android:text="c" />
+        <Button android:id="@+id/btn_v" style="@style/WinKeyStandard" android:text="v" />
+        <Button android:id="@+id/btn_b" style="@style/WinKeyStandard" android:text="b" />
+        <Button android:id="@+id/btn_n" style="@style/WinKeyStandard" android:text="n" />
+        <Button android:id="@+id/btn_m" style="@style/WinKeyStandard" android:text="m" />
+        <Button android:id="@+id/btn_comma" style="@style/WinKeyStandard" android:text="," />
+        <Button android:id="@+id/btn_period" style="@style/WinKeyStandard" android:text="." />
+        <Button android:id="@+id/btn_up" style="@style/WinKeySpecial" android:layout_weight="1" android:text="▲" />
+    </LinearLayout>
+
+    <!-- 6. Satır: Ctrl, Win, Alt, Space, Yön Tuşları -->
+    <LinearLayout
+        android:id="@+id/row_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal"
+        android:weightSum="11.5">
+        <Button android:id="@+id/btn_ctrl" style="@style/WinKeySpecial" android:layout_weight="1.25" android:text="Ctrl" />
+        <Button android:id="@+id/btn_win" style="@style/WinKeySpecial" android:layout_weight="1.25" android:text="⊞" />
+        <Button android:id="@+id/btn_alt" style="@style/WinKeySpecial" android:layout_weight="1.25" android:text="Alt" />
+        <Button android:id="@+id/btn_space" style="@style/WinKeyStandard" android:layout_weight="4.75" android:text="" />
+        <Button android:id="@+id/btn_left" style="@style/WinKeySpecial" android:layout_weight="1" android:text="◀" />
+        <Button android:id="@+id/btn_down" style="@style/WinKeySpecial" android:layout_weight="1" android:text="▼" />
+        <Button android:id="@+id/btn_right" style="@style/WinKeySpecial" android:layout_weight="1" android:text="▶" />
+    </LinearLayout>
+
+</LinearLayout>

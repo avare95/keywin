@@ -1,0 +1,8 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.KeyWin" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+    </style>
+
+    <style name="Theme.KeyWin" parent="Base.Theme.KeyWin" />
+</resources>

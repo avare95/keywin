@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tuşa basıldığında Windows Mavisi olur -->
+    <item android:state_pressed="true" android:color="#0078D7" />
+    <!-- Normal rengi koyu gri -->
+    <item android:color="#383838" />
+</selector>
